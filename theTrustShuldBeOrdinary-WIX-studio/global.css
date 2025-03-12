@@ -1,0 +1,212 @@
+/* CSS reference: https://www.wix.com/velo/reference/$w/styling-elements-with-css */
+ 
+/* These CSS styles will be applied globally to every page of this site. Write your CSS here, e.g.: */
+
+/*  Change button background color to red: */
+/* .button {
+    background-color: red;
+} */
+
+
+.parent-section-container,
+.parent-section-container-1,
+.parent-section-container-2,
+.parent-section-container-3,
+.parent-section-container-4,
+.parent-section-container-5,
+.parent-section-container-6,
+.parent-section-container-7,
+.parent-section-container-8{
+    border-bottom: 2px dotted rgba(217, 217, 214) !important;
+}
+.wixui-parent-section-container.parent-section-container,
+.wixui-parent-section-container-1.parent-section-container-1,
+.wixui-parent-section-container-2.parent-section-container-2,
+.wixui-parent-section-container-3.parent-section-container-3,
+.wixui-parent-section-container-4.parent-section-container-4,
+.wixui-parent-section-container-5.parent-section-container-5,
+.wixui-parent-section-container-6.parent-section-container-6,
+.wixui-parent-section-container-7.parent-section-container-7,
+.wixui-parent-section-container-8.parent-section-container-8 {
+    position: relative;
+    overflow: hidden;
+    border-top: 2px dotted rgb(215, 215, 210) !important;
+    border-bottom: 2px dotted rgb(215, 215, 210) !important;
+}
+
+.text-element-serial-no, .text-element-serial-no-1, .text-element-serial-no-2, .text-element-serial-no-3, .text-element-serial-no-4, .text-element-serial-no-5, .text-element-serial-no-6, .text-element-serial-no-7, .text-element-serial-no-8,
+.published-date, .published-date-1, .published-date-2, .published-date-3, .published-date-4, .published-date-5, .published-date-6, .published-date-7, .published-date-8,
+.post-title, .post-title-1, .post-title-2, .post-title-3, .post-title-4, .post-title-5, .post-title-6, .post-title-7, .post-title-8 {
+    position: relative;
+    padding: 10px;
+    overflow: hidden;
+    display: inline-block;
+}
+
+/* .text-element-serial-no h5,
+.published-date span,
+.post-title span */
+
+.text-element-serial-no h5, .text-element-serial-no-1 h5, .text-element-serial-no-2 h5, .text-element-serial-no-3 h5, .text-element-serial-no-4 h5, .text-element-serial-no-5 h5, .text-element-serial-no-6 h5, .text-element-serial-no-7 h5, .text-element-serial-no-8 h5,
+.published-date span, .published-date-1 span, .published-date-2 span, .published-date-3 span, .published-date-4 span, .published-date-5 span, .published-date-6 span, .published-date-7 span, .published-date-8 span,
+.post-title h4, .post-title-1 h4, .post-title-2 h4, .post-title-3 h4, .post-title-4 h4, .post-title-5 h4, .post-title-6 h4, .post-title-7 h4, .post-title-8 h4
+ {
+    position: relative;
+    z-index: 99!important;
+    margin: 0;
+}
+
+
+
+/* .text-element-serial-no::before,
+.published-date::before,
+.post-title::before  */
+
+
+.text-element-serial-no::before, .text-element-serial-no-1::before, .text-element-serial-no-2::before, .text-element-serial-no-3::before, .text-element-serial-no-4::before, .text-element-serial-no-5::before, .text-element-serial-no-6::before, .text-element-serial-no-7::before, .text-element-serial-no-8::before,
+.published-date::before, .published-date-1::before, .published-date-2::before, .published-date-3::before, .published-date-4::before, .published-date-5::before, .published-date-6::before, .published-date-7::before, .published-date-8::before,
+.post-title::before, .post-title-1::before, .post-title-2::before, .post-title-3::before, .post-title-4::before, .post-title-5::before, .post-title-6::before, .post-title-7::before, .post-title-8::before
+{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background-color: rgb(215, 215, 210);
+    transition: width 0.5s ease-in-out;
+    z-index: 0;
+}
+
+/* .text-element-serial-no span,
+.published-date span,
+.post-title span {
+    display: inline-block;
+    white-space: nowrap;
+} */
+
+.parent-section-container:hover .text-element-serial-no::before,
+.parent-section-container-1:hover .text-element-serial-no-1::before,
+.parent-section-container-2:hover .text-element-serial-no-2::before,
+.parent-section-container-3:hover .text-element-serial-no-3::before,
+.parent-section-container-4:hover .text-element-serial-no-4::before,
+.parent-section-container-5:hover .text-element-serial-no-5::before,
+.parent-section-container-6:hover .text-element-serial-no-6::before,
+.parent-section-container-7:hover .text-element-serial-no-7::before,
+.parent-section-container-8:hover .text-element-serial-no-8::before {
+    width: 100%;
+}
+.parent-section-container:hover .published-date::before,
+.parent-section-container-1:hover .published-date-1::before,
+.parent-section-container-2:hover .published-date-2::before,
+.parent-section-container-3:hover .published-date-3::before,
+.parent-section-container-4:hover .published-date-4::before,
+.parent-section-container-5:hover .published-date-5::before,
+.parent-section-container-6:hover .published-date-6::before,
+.parent-section-container-7:hover .published-date-7::before,
+.parent-section-container-8:hover .published-date-8::before {
+    width: 100%;
+}
+.parent-section-container:hover .post-title::before,
+.parent-section-container-1:hover .post-title-1::before,
+.parent-section-container-2:hover .post-title-2::before,
+.parent-section-container-3:hover .post-title-3::before,
+.parent-section-container-4:hover .post-title-4::before,
+.parent-section-container-5:hover .post-title-5::before,
+.parent-section-container-6:hover .post-title-6::before,
+.parent-section-container-7:hover .post-title-7::before,
+.parent-section-container-8:hover .post-title-8::before {
+    width: 100%;
+}
+.parent-section-container:hover .post-card-action-button,
+.parent-section-container-1:hover .action-button-1,
+.parent-section-container-2:hover .action-button-2,
+.parent-section-container-3:hover .action-button-3,
+.parent-section-container-4:hover .action-button-4,
+.parent-section-container-5:hover .action-button-5,
+.parent-section-container-6:hover .action-button-6,
+.parent-section-container-7:hover .action-button-7,
+.parent-section-container-8:hover .action-button-8 {
+    display: block;
+    animation: buttonTransitionIn 0.5s forwards;
+}
+
+.post-card-action-button,
+.action-button-1,
+.action-button-2,
+.action-button-3,
+.action-button-4,
+.action-button-5,
+.action-button-6,
+.action-button-7,
+.action-button-8{
+    display: none;
+    position: absolute;
+    bottom: -40px; /* Start position, hidden below */
+    transition: bottom 0.5s ease-in-out;
+}
+
+@keyframes buttonTransitionIn {
+    0% {
+        bottom: -40px;
+    }
+    100% {
+        bottom: 10px; /* Final position */
+    }
+}
+
+.parent-section-container:not(:hover) .post-card-action-button {
+    animation: buttonTransitionOut 0.5s forwards;
+}
+
+@keyframes buttonTransitionOut {
+    0% {
+        bottom: 10px; /* Position when hovered */
+    }
+    100% {
+        bottom: -40px; /* Hidden position */
+    }
+}
+
+.current-date-time{
+    font-size: 35px !important; 
+white-space: nowrap;
+}
+
+:is(.header-menu-button-1, .header-menu-button-2):hover > span > span {
+    font-size: 19px !important;
+    color: #272727 !important;
+}
+
+
+:is(.footer-terms-condition, .footer-privacy-policy) > span {
+    border-bottom: 2px dotted #ffffff !important;
+}
+:is(.footer-terms-condition, .footer-privacy-policy):hover > span {
+    border-bottom: 2px dotted #272727 !important;
+}
+:is(.footer-terms-condition, .footer-privacy-policy):hover > span > span{
+    color: #272727 !important;
+}
+:is(.footer-the-ordinary-com):hover > span > span{
+    color: #272727 !important;
+    font-weight: 900;
+}
+:is(.footer-the-ordinary-com):hover > span > span > span > svg{
+    background: #d5d5cf !important;
+}
+:is(.footer-terms-condition, .footer-privacy-policy):hover > span > span > span > svg{
+    fill: #272727 !important;
+}
+:is(.button-day):hover{
+    background-color: #7F7F7F;
+    border: 0px;
+}
+ :is(.button-night):hover{
+    background-color: #ffffff;
+    border: 0px;
+ }
+.header-menu-button-1:hover span svg,
+.header-menu-button-2:hover span svg{
+  background: #d5d5cf !important;
+}
