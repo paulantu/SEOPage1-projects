@@ -1,0 +1,15 @@
+/*
+Theme Name: Astra Child
+Theme URI: https://example.com/astra-child
+Description: A child theme for Astra.
+Author: Antu Paul
+Author URI: https://example.com
+Template: astra
+Version: 1.0.0
+Text Domain: astra-child
+*/
+
+/* Importing parent theme styles */
+@import url("../astra/style.css");
+
+/* Custom styles for the child theme */
