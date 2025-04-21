@@ -1,0 +1,81 @@
+<style>
+    .menu {
+        display: flex;
+        max-width: 100%;
+        justify-content: flex-start;
+        align-items: center;
+        list-style: none;
+        overflow-x: auto;
+        position: relative;
+    }
+    .menu li {
+        padding: 20px 0;
+        position: relative;
+    }
+    .menu a {
+        text-decoration: none;
+        padding: 15px 20px;
+        white-space: nowrap;
+        font-size: 16px;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+    .menu a.active {
+        color: #333;
+        font-weight: 600;
+    }
+    .menu a:not(.active) {
+        color: 
+#949494;
+    }
+
+    .menu > li > a:hover{
+        color: #333;
+        font-weight: 600;
+        border-bottom: 3px solid 
+#48F7EA;
+    }
+    .menu .active:hover {
+        border-bottom: 2px solid 
+#48F7EA;
+    }
+    /* Responsive styles */
+    @media screen and (max-width: 768px) {
+        .menu {
+            justify-content: space-between;
+            padding: 0 10px;
+        }
+
+        .menu a {
+            padding: 15px 10px;
+            font-size: 14px;
+        }
+    }
+    @media screen and (max-width: 480px) {
+        .menu {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+        }
+
+        .menu::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Edge */
+        }
+
+        .menu a {
+            padding: 15px 8px;
+            font-size: 13px;
+        }
+    }
+</style>
+<nav class="menu-container">
+    <ul class="menu">
+        <li><a href="#details" class="active" id="">Detail</a></li>
+        <li><a href="#listen" id="">Listen</a></li>
+        <li><a href="#photos" id="">Photos</a></li>
+        <li><a href="#map" id="">Map</a></li>
+        <li><a href="#faq" id="">FAQ</a></li>
+        <li><a href="#trip-planning" id="">Trip Planning</a></li>
+        <li><a href="#reviews" id="">Reviews</a></li>
+    </ul>
+</nav>

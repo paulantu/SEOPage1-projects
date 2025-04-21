@@ -1,0 +1,15 @@
+<script>
+    let audioButton = document.querySelector('.banner-audio-button');
+           audioButton.addEventListener('click', function(){
+            var audio = document.getElementById("banner-audio");
+    
+             if (audio.paused) {
+                audio.play();
+            }else{
+                audio.pause();
+                // audio.currentTime = 0
+            }
+          });
+        </script>
+    
+        <audio id="banner-audio" src="https://blaise.360elevate.co/wp-content/uploads/2025/04/555-36481.mp3"></audio>
