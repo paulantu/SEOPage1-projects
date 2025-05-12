@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category tab with popup video</title>
+
+    <style>
+        /* Tab styles */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .tab-btn {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            color: #666;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            color: #000;
+        }
+        
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #e13c33;
+        }
+        
+        /* Cards grid */
+        .cards-container {
+            display: none;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            gap: 20px;
+        }
+        
+        .cards-container.active {
+            display: grid;
+        }
+        
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        
+        .card-content {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .card-subtitle {
+            font-size: 1.125rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #222;
+        }
+        
+        .card-subtitle {
+            font-size: 16px;
+            font-weight: bold;
+            color: #e13c33;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .card-text {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .card-link {
+            display: inline-block;
+            color: #e13c33;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .card-link i {
+            margin-left: 5px;
+        }
+        
+        /* Video popup */
+        .video-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .video-popup.active {
+            display: flex;
+        }
+        
+        .video-container {
+            width: 80%;
+            max-width: 800px;
+            position: relative;
+        }
+        
+        .video-container iframe {
+            width: 100% !important;
+            height: 500px !important;
+            border: none;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: #fff;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+                border-bottom: none;
+            }
+            
+            .tab-btn {
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .video-container {
+                width: 95%;
+            }
+            
+            .video-container iframe {
+                height: 300px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="safari">Safari/Hunting</button>
+            <button class="tab-btn" data-tab="fishing">Fishing</button>
+            <button class="tab-btn" data-tab="others">Others</button>
+        </div>
+        
+        <!-- Safari/Hunting Tab -->
+        <div class="cards-container active" id="safari">
+            <!-- Card 1 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/31933303/pexels-photo-31933303/free-photo-of-majestic-cheetah-strolling-in-namibian-grasslands.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Safari Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">SOUTH AFRICAN ADVENTURE I</h3>
+                    <p class="card-text">Make it out of this hunt alive and you'll have bragging rights for a lifetime. Enough said.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/31941131/pexels-photo-31941131/free-photo-of-leopard-and-cub-resting-in-african-wilderness.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Safari Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">SOUTH AFRICAN ADVENTURE II</h3>
+                    <p class="card-text">Test your skills against the most dangerous game in the African wilderness.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+    
+    
+    
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/51318/alligator-american-alligator-gator-dangerous-51318.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Safari Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">SOUTH AFRICAN ADVENTURE III</h3>
+                    <p class="card-text">Make it out of this hunt alive and you'll have bragging rights for a lifetime. Enough said.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/8521834/pexels-photo-8521834.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Safari Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">SOUTH AFRICAN ADVENTURE IV</h3>
+                    <p class="card-text">Test your skills against the most dangerous game in the African wilderness.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+    
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/833017/pexels-photo-833017.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Safari Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">SOUTH AFRICAN ADVENTURE V</h3>
+                    <p class="card-text">Make it out of this hunt alive and you'll have bragging rights for a lifetime. Enough said.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/12123993/pexels-photo-12123993.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Safari Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">SOUTH AFRICAN ADVENTURE VI</h3>
+                    <p class="card-text">Test your skills against the most dangerous game in the African wilderness.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+    
+            
+            
+            <!-- Add 4 more cards for Safari/Hunting -->
+            <!-- Card 3 to 6 would go here -->
+        </div>
+        
+        <!-- Fishing Tab -->
+        <div class="cards-container" id="fishing">
+            <!-- Card 1 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/6831250/pexels-photo-6831250.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Fishing Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">OCEAN FISHING ADVENTURE I</h3>
+                    <p class="card-text">Battle the giants of the deep in this ultimate fishing experience.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/5889642/pexels-photo-5889642.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Fishing Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">RIVER FISHING EXPEDITION</h3>
+                    <p class="card-text">Navigate wild rivers and catch trophy fish in remote locations.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+    
+    
+    
+            <!-- Card 1 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/294674/pexels-photo-294674.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Fishing Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">OCEAN FISHING ADVENTURE III</h3>
+                    <p class="card-text">Battle the giants of the deep in this ultimate fishing experience.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/190294/pexels-photo-190294.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Fishing Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">RIVER FISHING EXPEDITION IV</h3>
+                    <p class="card-text">Navigate wild rivers and catch trophy fish in remote locations.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+    
+            <!-- Card 1 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/1165125/pexels-photo-1165125.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Fishing Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">OCEAN FISHING ADVENTURE V</h3>
+                    <p class="card-text">Battle the giants of the deep in this ultimate fishing experience.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/2131967/pexels-photo-2131967.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Fishing Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">RIVER FISHING EXPEDITION VI</h3>
+                    <p class="card-text">Navigate wild rivers and catch trophy fish in remote locations.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Add 4 more cards for Fishing -->
+            <!-- Card 3 to 6 would go here -->
+        </div>
+        
+        <!-- Others Tab -->
+        <div class="cards-container" id="others">
+            <!-- Card 1 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/557659/pexels-photo-557659.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Other Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">HIMALAYAN EXPEDITION</h3>
+                    <p class="card-text">Conquer the highest peaks and test your limits in this extreme adventure.</p>
+                    <a href="#" class="card-link">Read more <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/197907/pexels-photo-197907.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Other Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">AMAZON RAINFOREST TREK</h3>
+                    <p class="card-text">Survive in the world's most biodiverse and challenging environment.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+    
+    
+            <!-- Card 1 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/992819/pexels-photo-992819.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Other Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">HIMALAYAN EXPEDITION</h3>
+                    <p class="card-text">Conquer the highest peaks and test your limits in this extreme adventure.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/2174656/pexels-photo-2174656.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Other Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">AMAZON RAINFOREST TREK</h3>
+                    <p class="card-text">Survive in the world's most biodiverse and challenging environment.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+    
+    
+            <!-- Card 1 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/1371360/pexels-photo-1371360.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Other Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">HIMALAYAN EXPEDITION</h3>
+                    <p class="card-text">Conquer the highest peaks and test your limits in this extreme adventure.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="card" data-video="https://www.youtube.com/embed/4S5KBlieT0I">
+                <img src="https://images.pexels.com/photos/320007/pexels-photo-320007.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Other Adventure" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-subtitle">AMAZON RAINFOREST TREK</h3>
+                    <p class="card-text">Survive in the world's most biodiverse and challenging environment.</p>
+                    <a href="#" class="card-link">Read more<i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+            
+            <!-- Add 4 more cards for Others -->
+            <!-- Card 3 to 6 would go here -->
+        </div>
+    </div>
+    
+    <!-- Video Popup -->
+    <div class="video-popup">
+        <div class="video-container">
+            <span class="close-btn">&times;</span>
+            <iframe src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+    
+    <script>
+        // Tab functionality
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const cardContainers = document.querySelectorAll('.cards-container');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all tabs and containers
+                tabBtns.forEach(btn => btn.classList.remove('active'));
+                cardContainers.forEach(container => container.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding container
+                btn.classList.add('active');
+                const tabId = btn.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+    // Video popup functionality - UPDATED VERSION
+    const cards = document.querySelectorAll('.card');
+    const videoPopup = document.querySelector('.video-popup');
+    const videoIframe = videoPopup.querySelector('iframe');
+    const closeBtn = videoPopup.querySelector('.close-btn');
+    
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            let videoUrl = card.getAttribute('data-video');
+            
+            // Convert YouTube watch URL to embed URL if needed
+            if (videoUrl.includes('youtube.com/watch?v=')) {
+                videoUrl = videoUrl.replace('youtube.com/watch?v=', 'youtube.com/embed/');
+            }
+            
+            // Ensure no parameters after video ID (or add ?autoplay=1)
+            videoUrl = videoUrl.split('&')[0] + '?autoplay=1&rel=0';
+            
+            videoIframe.src = videoUrl;
+            videoPopup.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+    
+    closeBtn.addEventListener('click', () => {
+        videoPopup.classList.remove('active');
+        videoIframe.src = '';
+        document.body.style.overflow = 'auto';
+    });
+    
+    videoPopup.addEventListener('click', (e) => {
+        if (e.target === videoPopup) {
+            videoPopup.classList.remove('active');
+            videoIframe.src = '';
+            document.body.style.overflow = 'auto';
+        }
+    });
+    </script>
+</body>
+</html>
+
+
+

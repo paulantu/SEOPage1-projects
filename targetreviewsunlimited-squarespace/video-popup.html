@@ -1,0 +1,525 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+
+/* Video Gallery Section */
+.main-content{
+    background-color: #000000;
+}
+.video-gallery-section {
+    padding: 60px 0;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    color: #e13c33;
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.video-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.video-thumbnail {
+    position: relative;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+    overflow: hidden;
+}
+
+.video-thumbnail img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-thumbnail .play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 3rem;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.video-card:hover .play-icon {
+    opacity: 1;
+}
+
+.video-description {
+    padding: 20px;
+}
+
+.video-description h3 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.video-description p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Video Popup */
+.video-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.popup-content {
+    position: relative;
+    width: 90%;
+    max-width: 1000px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 2;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.close-popup {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-video-container {
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+    position: relative;
+}
+
+.main-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.main-video video {
+    height: 560px;
+    width: 100%;
+}
+.video-carousel {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: #f5f5f5;
+    position: relative;
+}
+
+.carousel-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+    gap: 15px;
+    padding: 10px 0;
+    scrollbar-width: none; /* Firefox */
+}
+
+.carousel-track::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.carousel-item {
+    scroll-snap-align: start;
+    flex: 0 0 calc(33.333% - 10px);
+    min-width: 150px;
+    height: 120px; /* Fixed height for all carousel items */
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    transition: opacity 0.3s ease;
+}
+
+/* Center Play Icon in Carousel Items */
+.carousel-item .play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 1.5rem;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.carousel-item.active .play-icon {
+    display: none; 
+}
+
+.carousel-item.active::after {
+    content: '\f04c'; /* FontAwesome pause icon */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 1.5rem;
+    opacity: 0.8;
+}
+.carousel-item:hover .play-icon {
+    opacity: 1;
+}
+
+.carousel-item.active img {
+    opacity: 0.7;
+}
+
+.carousel-item:hover img {
+    opacity: 0.9;
+}
+
+.carousel-nav {
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    margin: 0 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .video-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .carousel-item {
+        flex: 0 0 calc(50% - 10px);
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .popup-content {
+        width: 95%;
+    }
+}
+
+@media (max-width: 576px) {
+    .video-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .carousel-item {
+        flex: 0 0 calc(100% - 10px);
+    }
+    
+    .carousel-nav {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+}
+    </style>
+<main class="main-content">
+    <section class="video-gallery-section">
+        <div class="container">
+            <h2 class="section-title">Our Video Collection</h2>
+            
+            <div class="video-grid">
+                <!-- Video items will be added dynamically with JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Popup -->
+    <div class="video-popup">
+        <div class="popup-overlay"></div>
+        <div class="popup-content">
+            <button class="close-popup"><i class="fas fa-times"></i></button>
+            <div class="main-video-container">
+                <div class="main-video"></div>
+            </div>
+            <div class="video-carousel">
+                <button class="carousel-nav prev"><i class="fas fa-chevron-left"></i></button>
+                <div class="carousel-track"></div>
+                <button class="carousel-nav next"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </div>
+</main>
+    <script>
+        // Sample video data
+const videoData = [
+    {
+        id: 1,
+        title: "Beautiful Nature Scenes",
+        description: "Stunning landscapes from around the world",
+        thumbnail: "https://video.squarespace-cdn.com/content/v1/664c88289cff3949f4b66203/7c7a83bd-462c-415f-a9a4-d3cca089a441/thumbnail",
+        videoUrl: "https://static1.squarespace.com/static/664c88289cff3949f4b66203/t/6819a1a7acc735223f2d000e/1746510248759/video-4.mp4"
+    },
+    {
+        id: 2,
+        title: "City Time Lapse",
+        description: "The hustle and bustle of a modern city",
+        thumbnail: "https://images.squarespace-cdn.com/content/664c88289cff3949f4b66203/c82e407b-923c-42e2-bc27-594cfbabe20e/gorongosa-national-park-animals-mozambique-civil-war-1600.jpg",
+        videoUrl: "https://static1.squarespace.com/static/664c88289cff3949f4b66203/t/6819a67a7ad85804ed8a3089/1746511596084/video-3.mp4"
+    },
+    {
+        id: 3,
+        title: "Ocean Wonders",
+        description: "Explore the depths of the ocean",
+        thumbnail: "https://images.squarespace-cdn.com/content/664c88289cff3949f4b66203/68bd88a4-074e-44b3-a89a-26f83d403827/66f372a7d52169d31f55e438_6579e6379a201b2ae19b3310_img-nz-hunt-red-stag-main.jpg",
+        videoUrl: "https://static1.squarespace.com/static/664c88289cff3949f4b66203/t/6819a7191cf0b47c37c18244/1746511681837/video-1.mp4"
+    },
+    {
+        id: 4,
+        title: "Mountain Adventure",
+        description: "Climbing the highest peaks",
+        thumbnail: "https://images.squarespace-cdn.com/content/664c88289cff3949f4b66203/0ff1cb1b-07c9-418a-b578-3512ed5051f1/Screenshot+2025-03-12+at+10.54.39%E2%80%AFAM.png",
+        videoUrl: "https://static1.squarespace.com/static/664c88289cff3949f4b66203/t/6819a1a7acc735223f2d000e/1746510248759/video-4.mp4"
+    },
+    {
+        id: 5,
+        title: "Wildlife Documentary",
+        description: "Amazing animals in their natural habitat",
+        thumbnail: "https://images.squarespace-cdn.com/content/664c88289cff3949f4b66203/c82e407b-923c-42e2-bc27-594cfbabe20e/gorongosa-national-park-animals-mozambique-civil-war-1600.jpg",
+        videoUrl: "https://static1.squarespace.com/static/664c88289cff3949f4b66203/t/6819a67a7ad85804ed8a3089/1746511596084/video-3.mp4"
+    },
+    {
+        id: 6,
+        title: "Space Exploration",
+        description: "Journey through the cosmos",
+        thumbnail: "https://images.squarespace-cdn.com/content/664c88289cff3949f4b66203/68bd88a4-074e-44b3-a89a-26f83d403827/66f372a7d52169d31f55e438_6579e6379a201b2ae19b3310_img-nz-hunt-red-stag-main.jpg",
+        videoUrl: "https://static1.squarespace.com/static/664c88289cff3949f4b66203/t/6819a7191cf0b47c37c18244/1746511681837/video-1.mp4"
+    }
+];
+
+// DOM Elements
+const videoGrid = document.querySelector('.video-grid');
+const videoPopup = document.querySelector('.video-popup');
+const popupOverlay = document.querySelector('.popup-overlay');
+const closePopup = document.querySelector('.close-popup');
+const mainVideoContainer = document.querySelector('.main-video');
+const carouselTrack = document.querySelector('.carousel-track');
+const prevButton = document.querySelector('.carousel-nav.prev');
+const nextButton = document.querySelector('.carousel-nav.next');
+
+// Current video index
+let currentVideoIndex = 0;
+
+// Initialize the video grid
+function initVideoGrid() {
+    videoGrid.innerHTML = '';
+    
+    videoData.forEach((video, index) => {
+        const videoCard = document.createElement('div');
+        videoCard.className = 'video-card';
+        videoCard.dataset.id = video.id;
+        videoCard.dataset.index = index;
+        
+        videoCard.innerHTML = `
+            <div class="video-thumbnail">
+                <img src="${video.thumbnail}" alt="${video.title}">
+                <div class="play-icon"><i class="fas fa-play"></i></div>
+            </div>
+            <div class="video-description">
+                <h3>${video.title}</h3>
+                <p>${video.description}</p>
+            </div>
+        `;
+        
+        videoCard.addEventListener('click', () => openVideoPopup(index));
+        videoGrid.appendChild(videoCard);
+    });
+}
+
+// Open video popup
+function openVideoPopup(index) {
+    currentVideoIndex = index;
+    updateMainVideo();
+    updateCarousel();
+    videoPopup.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+// Close video popup
+function closeVideoPopup() {
+    videoPopup.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    
+    // Pause the current video
+    const video = mainVideoContainer.querySelector('video');
+    if (video) {
+        const src = video.src;
+        video.src = src; // This stops the video
+    }
+}
+
+// Update main video
+function updateMainVideo() {
+    const video = videoData[currentVideoIndex];
+    mainVideoContainer.innerHTML = `
+        <video 
+            src="${video.videoUrl}" 
+            controls
+            autoplay
+            playsinline
+            class="main-video-player">
+        </video>
+    `;
+    
+    // For better cross-browser compatibility, we'll also programmatically play the video
+    const videoElement = mainVideoContainer.querySelector('.main-video-player');
+    videoElement.play().catch(error => {
+        console.log('Autoplay was prevented:', error);
+        // Fallback: show controls if autoplay fails
+        videoElement.controls = true;
+    });
+}
+
+// Update carousel
+function updateCarousel() {
+    carouselTrack.innerHTML = '';
+    
+    videoData.forEach((video, index) => {
+        const carouselItem = document.createElement('div');
+        carouselItem.className = `carousel-item ${index === currentVideoIndex ? 'active' : ''}`;
+        carouselItem.dataset.index = index;
+        
+        carouselItem.innerHTML = `
+            <img src="${video.thumbnail}" alt="${video.title}">
+            <div class="play-icon">
+                <i class="fas ${index === currentVideoIndex ? 'fa-pause' : 'fa-play'}"></i>
+            </div>
+        `;
+        
+        carouselItem.addEventListener('click', () => {
+            currentVideoIndex = index;
+            updateMainVideo();
+            updateCarousel();
+            scrollToCurrentVideo();
+        });
+        
+        carouselTrack.appendChild(carouselItem);
+    });
+}
+
+// Scroll to current video in carousel
+function scrollToCurrentVideo() {
+    const carouselItems = document.querySelectorAll('.carousel-item');
+    if (carouselItems[currentVideoIndex]) {
+        carouselItems[currentVideoIndex].scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+        });
+    }
+}
+
+// Event listeners
+closePopup.addEventListener('click', closeVideoPopup);
+popupOverlay.addEventListener('click', closeVideoPopup);
+
+prevButton.addEventListener('click', () => {
+    currentVideoIndex = (currentVideoIndex - 1 + videoData.length) % videoData.length;
+    updateMainVideo();
+    updateCarousel();
+    scrollToCurrentVideo();
+});
+
+nextButton.addEventListener('click', () => {
+    currentVideoIndex = (currentVideoIndex + 1) % videoData.length;
+    updateMainVideo();
+    updateCarousel();
+    scrollToCurrentVideo();
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+    if (videoPopup.style.display === 'flex') {
+        if (e.key === 'Escape') {
+            closeVideoPopup();
+        } else if (e.key === 'ArrowLeft') {
+            currentVideoIndex = (currentVideoIndex - 1 + videoData.length) % videoData.length;
+            updateMainVideo();
+            updateCarousel();
+            scrollToCurrentVideo();
+        } else if (e.key === 'ArrowRight') {
+            currentVideoIndex = (currentVideoIndex + 1) % videoData.length;
+            updateMainVideo();
+            updateCarousel();
+            scrollToCurrentVideo();
+        }
+    }
+});
+
+// Initialize the page
+initVideoGrid();
+    </script>

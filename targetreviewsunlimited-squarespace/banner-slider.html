@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slick slider</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+<style>
+    .slider-container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        overflow: hidden;
+        max-height: 500px !important;
+        height: 500px !important;
+    }
+
+    .video-slider {
+        width: 100%;
+        max-width: 100%;
+        height: 500px !important;
+        max-height: 500px !important;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row !important;
+        margin: 0 auto;
+    }
+
+    .video-slide {
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        padding: 0 20px;
+        height: 500px;
+    }
+
+    .video-slide iframe {
+        max-height: 500px;
+        width: 100%;
+        height: 500px;
+        max-width: 100%;
+        object-fit: contain;
+    }
+
+    /* Show default arrows */
+    .slick-prev,
+    .slick-next {
+        display: block !important;
+        z-index: 1000;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(255, 0, 0, 0.767);
+        border-radius: 50%;
+        color: #000000;
+    }
+
+    .slick-prev {
+        left: 20px;
+    }
+
+    .slick-next {
+        right: 20px;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+        color: white;
+        font-size: 20px;
+    }
+
+    /* Dots styling */
+    .slick-dots {
+        bottom: 20px;
+    }
+    
+    .slick-dots li button:before {
+        font-size: 12px;
+        color: white;
+        opacity: 0.5;
+    }
+    
+    .slick-dots li.slick-active button:before {
+        color: red;
+        opacity: 1;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .video-slider {
+            width: 100%;
+        }
+
+        .video-slide {
+            height: 250px;
+            padding: 0 15px;
+        }
+
+        .video-slide iframe {
+            max-height: 250px;
+            height: 250px;
+        }
+        
+        .slick-prev {
+            left: 10px;
+        }
+
+        .slick-next {
+            right: 10px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .video-slide {
+            height: 200px;
+            padding: 0 10px;
+        }
+
+        .video-slide iframe {
+            max-height: 200px;
+            height: 200px;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="slider-container">
+        <div class="video-slider">
+            <div class="video-slide">
+                <iframe
+                    src="https://www.youtube.com/embed/khwfC-8Xd94?autoplay=0&mute=1&controls=1&loop=1&playlist=SwpK9m44XXs"
+                    frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-slide">
+                <iframe
+                    src="https://www.youtube.com/embed/wtwlX6xikUc?autoplay=1&mute=1&controls=1&loop=1&playlist=C0DPdy98e4c"
+                    frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-slide">
+                <iframe
+                    src="https://www.youtube.com/embed/UlT-zruec_k?autoplay=1&mute=1&controls=1&loop=1&playlist=C0DPdy98e4c"
+                    frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-slide">
+                <iframe
+                    src="https://www.youtube.com/embed/tXspjaUBB0I?autoplay=1&mute=1&controls=1&loop=1&playlist=C0DPdy98e4c"
+                    frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    
+    <script>
+        $(document).ready(function () {
+            $('.video-slider').slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                autoplay: true, // Enable autoplay
+                autoplaySpeed: 5000, // 5 seconds between slides
+                speed: 1000, // Transition speed
+                cssEase: 'ease-in-out',
+                infinite: true,
+                arrows: true,
+                dots: true, // Show dots navigation
+                pauseOnHover: false,
+                pauseOnFocus: false,
+                waitForAnimate: false,
+                responsive: [
+                    {
+                        breakpoint: 1024,
+                        settings: {
+                            slidesToShow: 1,
+                            speed: 1000
+                        }
+                    },
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 1,
+                            speed: 800
+                        }
+                    },
+                    {
+                        breakpoint: 480,
+                        settings: {
+                            slidesToShow: 1,
+                            speed: 600
+                        }
+                    }
+                ]
+            });
+    
+            // Function to handle YouTube video control via postMessage API
+            function postMessageToCurrentSlide(action) {
+                let currentSlide = $('.video-slider').slick('slickCurrentSlide');
+                let currentIframe = $('.video-slider').find('.slick-slide[data-slick-index="' + currentSlide + '"] iframe')[0];
+    
+                if (currentIframe) {
+                    if (action === 'play') {
+                        currentIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                    } else if (action === 'pause') {
+                        currentIframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    }
+                }
+            }
+    
+            // On slide change
+            $('.video-slider').on('beforeChange', function () {
+                // Pause all videos when changing slides
+                postMessageToCurrentSlide('pause');
+            });
+    
+            $('.video-slider').on('afterChange', function () {
+                // Play the current slide's video
+                postMessageToCurrentSlide('play');
+            });
+    
+            // Update all iframe URLs to enable the YouTube API
+            $('.video-slide iframe').each(function () {
+                let src = $(this).attr('src');
+                if (src && src.indexOf('enablejsapi=1') === -1) {
+                    $(this).attr('src', src + (src.indexOf('?') === -1 ? '?' : '&') + 'enablejsapi=1');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+

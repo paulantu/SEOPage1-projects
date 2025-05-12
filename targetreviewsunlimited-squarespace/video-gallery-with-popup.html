@@ -1,0 +1,558 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video gallery with popup</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* Main Content */
+.others-main-content {
+    background-color: #000000;
+}
+
+/* Video Gallery Section */
+.others-video-gallery-section {
+    padding: 60px 0;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.others-section-title {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    color: #e13c33;
+}
+
+.others-video-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.others-video-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.others-video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.others-video-thumbnail {
+    position: relative;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+    overflow: hidden;
+}
+
+.others-video-thumbnail img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.others-video-thumbnail .others-play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 3rem;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.others-video-card:hover .others-play-icon {
+    opacity: 1;
+}
+
+.others-video-description {
+    padding: 20px;
+}
+
+.others-video-description h3 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.others-video-description p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Video Popup */
+.others-video-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.others-popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.others-popup-content {
+    position: relative;
+    width: 90%;
+    max-width: 1000px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 2;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.others-close-popup {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.others-main-video-container {
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+    position: relative;
+}
+
+.others-main-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.others-main-video iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.others-video-carousel {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: #f5f5f5;
+    position: relative;
+}
+
+.others-carousel-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+    gap: 15px;
+    padding: 10px 0;
+    scrollbar-width: none; /* Firefox */
+}
+
+.others-carousel-track::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.others-carousel-item {
+    scroll-snap-align: start;
+    flex: 0 0 calc(33.333% - 10px);
+    min-width: 150px;
+    height: 120px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.others-carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+    transition: opacity 0.3s ease;
+}
+
+/* Center Play Icon in Carousel Items */
+.others-carousel-item .others-play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 1.5rem;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.others-carousel-item.active .others-play-icon {
+    display: none; 
+}
+
+.others-carousel-item.active::after {
+    content: '\f04c'; /* FontAwesome pause icon */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 1.5rem;
+    opacity: 0.8;
+}
+
+.others-carousel-item:hover .others-play-icon {
+    opacity: 1;
+}
+
+.others-carousel-item.active img {
+    opacity: 0.7;
+    border: 2px solid #e13c33;
+}
+
+.others-carousel-item:hover img {
+    opacity: 0.9;
+}
+
+.others-carousel-nav {
+    background: rgba(225, 60, 51, 0.7);
+    color: #fff;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    margin: 0 10px;
+    transition: background 0.3s ease;
+}
+
+.others-carousel-nav:hover {
+    background: rgba(225, 60, 51, 0.9);
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .others-video-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .others-carousel-item {
+        flex: 0 0 calc(50% - 10px);
+    }
+}
+
+@media (max-width: 768px) {
+    .others-section-title {
+        font-size: 2rem;
+    }
+    
+    .others-popup-content {
+        width: 95%;
+    }
+    
+    .others-video-carousel {
+        flex-direction: column;
+        height: auto;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .others-carousel-track {
+        flex-direction: column;
+        gap: 10px;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .others-carousel-item {
+        flex: 0 0 auto;
+        width: 100%;
+        height: 100px;
+    }
+
+    .others-carousel-nav {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .others-video-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .others-carousel-item {
+        flex: 0 0 calc(100% - 10px);
+    }
+    
+    .others-carousel-nav {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+}
+</style>
+</head>
+<body>
+    <main class="others-main-content">
+        <section class="others-video-gallery-section">
+            <div class="others-container">
+                <h2 class="others-section-title">Video Gallery</h2>
+                
+                <div class="others-video-grid">
+                    <!-- Video items will be added dynamically with JavaScript -->
+                </div>
+            </div>
+        </section>
+    
+        <!-- Video Popup -->
+        <div class="others-video-popup">
+            <div class="others-popup-overlay"></div>
+            <div class="others-popup-content">
+                <button class="others-close-popup"><i class="fas fa-times"></i></button>
+                <div class="others-main-video-container">
+                    <div class="others-main-video"></div>
+                </div>
+                <div class="others-video-carousel">
+                    <button class="others-carousel-nav others-prev"><i class="fas fa-chevron-left"></i></button>
+                    <div class="others-carousel-track"></div>
+                    <button class="others-carousel-nav others-next"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+    // Sample video data
+    const othersVideoData = [
+        {
+            id: 1,
+            title: "Beautiful Nature Scenes",
+            description: "Stunning landscapes from around the world",
+            thumbnail: "https://video.squarespace-cdn.com/content/v1/664c88289cff3949f4b66203/7c7a83bd-462c-415f-a9a4-d3cca089a441/thumbnail",
+            videoUrl: "https://www.youtube.com/embed/kRGwDrX6IoE?autoplay=1"
+        },
+        {
+            id: 2,
+            title: "City Time Lapse",
+            description: "The hustle and bustle of a modern city",
+            thumbnail: "https://images.squarespace-cdn.com/content/664c88289cff3949f4b66203/c82e407b-923c-42e2-bc27-594cfbabe20e/gorongosa-national-park-animals-mozambique-civil-war-1600.jpg",
+            videoUrl: "https://www.youtube.com/embed/ka8S3fi1OTo?autoplay=1"
+        },
+        {
+            id: 3,
+            title: "Ocean Wonders",
+            description: "Explore the depths of the ocean",
+            thumbnail: "https://images.squarespace-cdn.com/content/664c88289cff3949f4b66203/68bd88a4-074e-44b3-a89a-26f83d403827/66f372a7d52169d31f55e438_6579e6379a201b2ae19b3310_img-nz-hunt-red-stag-main.jpg",
+            videoUrl: "https://www.youtube.com/embed/OaAwbILX4JM?autoplay=1"
+        },
+        {
+            id: 4,
+            title: "Mountain Adventure",
+            description: "Climbing the highest peaks",
+            thumbnail: "https://images.squarespace-cdn.com/content/664c88289cff3949f4b66203/0ff1cb1b-07c9-418a-b578-3512ed5051f1/Screenshot+2025-03-12+at+10.54.39%E2%80%AFAM.png",
+            videoUrl: "https://www.youtube.com/embed/TJskH7jk73Q?autoplay=1"
+        },
+        {
+            id: 5,
+            title: "Wildlife Documentary",
+            description: "Amazing animals in their natural habitat",
+            thumbnail: "https://images.squarespace-cdn.com/content/664c88289cff3949f4b66203/c82e407b-923c-42e2-bc27-594cfbabe20e/gorongosa-national-park-animals-mozambique-civil-war-1600.jpg",
+            videoUrl: "https://www.youtube.com/embed/tJQL038XV10?autoplay=1"
+        },
+        {
+            id: 6,
+            title: "Space Exploration",
+            description: "Journey through the cosmos",
+            thumbnail: "https://images.squarespace-cdn.com/content/664c88289cff3949f4b66203/68bd88a4-074e-44b3-a89a-26f83d403827/66f372a7d52169d31f55e438_6579e6379a201b2ae19b3310_img-nz-hunt-red-stag-main.jpg",
+            videoUrl: "https://www.youtube.com/embed/pCu6GxuFwSg?autoplay=1"
+        }
+    ];
+    
+    // DOM Elements
+    const othersVideoGrid = document.querySelector('.others-video-grid');
+    const othersVideoPopup = document.querySelector('.others-video-popup');
+    const othersPopupOverlay = document.querySelector('.others-popup-overlay');
+    const othersClosePopup = document.querySelector('.others-close-popup');
+    const othersMainVideoContainer = document.querySelector('.others-main-video');
+    const othersCarouselTrack = document.querySelector('.others-carousel-track');
+    const othersPrevButton = document.querySelector('.others-prev');
+    const othersNextButton = document.querySelector('.others-next');
+    
+    // Current video index
+    let othersCurrentVideoIndex = 0;
+    
+    // Initialize the video grid
+    function othersInitVideoGrid() {
+        othersVideoGrid.innerHTML = '';
+        
+        othersVideoData.forEach((video, index) => {
+            const videoCard = document.createElement('div');
+            videoCard.className = 'others-video-card';
+            videoCard.dataset.id = video.id;
+            videoCard.dataset.index = index;
+            
+            videoCard.innerHTML = `
+                <div class="others-video-thumbnail">
+                    <img src="${video.thumbnail}" alt="${video.title}" loading="lazy">
+                    <div class="others-play-icon"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="others-video-description">
+                    <h3>${video.title}</h3>
+                    <p>${video.description}</p>
+                </div>
+            `;
+            
+            videoCard.addEventListener('click', () => othersOpenVideoPopup(index));
+            othersVideoGrid.appendChild(videoCard);
+        });
+    }
+    
+    // Open video popup
+    function othersOpenVideoPopup(index) {
+        othersCurrentVideoIndex = index;
+        othersUpdateMainVideo();
+        othersUpdateCarousel();
+        othersVideoPopup.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    
+    // Close video popup
+    function othersCloseVideoPopup() {
+        othersVideoPopup.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+    
+    // Update main video
+    function othersUpdateMainVideo() {
+        const video = othersVideoData[othersCurrentVideoIndex];
+        othersMainVideoContainer.innerHTML = `
+            <iframe 
+                src="${video.videoUrl}" 
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen
+                class="others-video-iframe">
+            </iframe>
+        `;
+    }
+    
+    // Update carousel
+    function othersUpdateCarousel() {
+        othersCarouselTrack.innerHTML = '';
+        
+        othersVideoData.forEach((video, index) => {
+            const carouselItem = document.createElement('div');
+            carouselItem.className = `others-carousel-item ${index === othersCurrentVideoIndex ? 'active' : ''}`;
+            carouselItem.dataset.index = index;
+            
+            carouselItem.innerHTML = `
+                <img src="${video.thumbnail}" alt="${video.title}" loading="lazy">
+                <div class="others-play-icon">
+                    <i class="fas ${index === othersCurrentVideoIndex ? 'fa-pause' : 'fa-play'}"></i>
+                </div>
+            `;
+            
+            carouselItem.addEventListener('click', () => {
+                othersCurrentVideoIndex = index;
+                othersUpdateMainVideo();
+                othersUpdateCarousel();
+                othersScrollToCurrentVideo();
+            });
+            
+            othersCarouselTrack.appendChild(carouselItem);
+        });
+    }
+    
+    // Scroll to current video in carousel
+    function othersScrollToCurrentVideo() {
+        const carouselItems = document.querySelectorAll('.others-carousel-item');
+        if (carouselItems[othersCurrentVideoIndex]) {
+            carouselItems[othersCurrentVideoIndex].scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
+        }
+    }
+    
+    // Event listeners
+    othersClosePopup.addEventListener('click', othersCloseVideoPopup);
+    othersPopupOverlay.addEventListener('click', othersCloseVideoPopup);
+    
+    othersPrevButton.addEventListener('click', () => {
+        othersCurrentVideoIndex = (othersCurrentVideoIndex - 1 + othersVideoData.length) % othersVideoData.length;
+        othersUpdateMainVideo();
+        othersUpdateCarousel();
+        othersScrollToCurrentVideo();
+    });
+    
+    othersNextButton.addEventListener('click', () => {
+        othersCurrentVideoIndex = (othersCurrentVideoIndex + 1) % othersVideoData.length;
+        othersUpdateMainVideo();
+        othersUpdateCarousel();
+        othersScrollToCurrentVideo();
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (othersVideoPopup.style.display === 'flex') {
+            if (e.key === 'Escape') {
+                othersCloseVideoPopup();
+            } else if (e.key === 'ArrowLeft') {
+                othersCurrentVideoIndex = (othersCurrentVideoIndex - 1 + othersVideoData.length) % othersVideoData.length;
+                othersUpdateMainVideo();
+                othersUpdateCarousel();
+                othersScrollToCurrentVideo();
+            } else if (e.key === 'ArrowRight') {
+                othersCurrentVideoIndex = (othersCurrentVideoIndex + 1) % othersVideoData.length;
+                othersUpdateMainVideo();
+                othersUpdateCarousel();
+                othersScrollToCurrentVideo();
+            }
+        }
+    });
+    
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', othersInitVideoGrid);
+    </script>
+</body>
+</html>
