@@ -1,0 +1,137 @@
+<style>
+
+ 
+  .wellness-marquee {
+    width: 100%;
+    padding: 10px 0;
+    overflow: hidden !important;
+    white-space: nowrap;
+    background-color: #FFF7DE;
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    z-index: 9999;
+  }
+
+  /* Push down the header to account for fixed marquee */
+  body {
+    padding-top: 55px !important;
+  }
+  
+  /* Scrolling container */
+  .marquee-content {
+    display: flex;
+    animation: scroll-left 30s linear infinite;
+    color: #333;
+  }
+
+  /* Individual scrolling text */
+  .marquee-text {
+    flex-shrink: 0;
+    padding-right: 50px;
+  }
+
+  /* Seamless scroll animation */
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Hover effect to pause animation */
+  .wellness-marquee:hover .marquee-content {
+    animation-play-state: paused;
+  }
+
+  /* Star emoji styling */
+  .star-emoji {
+    margin: 0 15px;
+    color: #ffa500;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .wellness-marquee {
+      font-size: 12px;
+      padding: 6px 0;
+    }
+    
+    body {
+      padding-top: 45px !important;
+    }
+    
+    .marquee-content {
+      animation-duration: 25s;
+    }
+  }
+</style>
+
+<script>
+  // Function to create and append marquee to the very top of the page
+  function addWellnessMarquee() {
+    // Check if marquee already exists to avoid duplicates
+    if (document.querySelector('.wellness-marquee')) {
+      return;
+    }
+
+    // Create the marquee container
+    const marqueeContainer = document.createElement('div');
+    marqueeContainer.className = 'wellness-marquee';
+    
+    // Create the scrolling content container
+    const marqueeContent = document.createElement('div');
+    marqueeContent.className = 'marquee-content';
+    
+    // Generate the text content
+    const textContent = 'WELLNESS IN EVERY DROP CLICK HERE';
+    const starEmoji = '<span class="star-emoji"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M28.5978 19.9335C19.2422 21.472 17.5789 23.4263 16.3315 34.8193C16.2899 35.1936 15.7494 35.1936 15.7078 34.8193C14.4604 23.4263 12.7972 21.5136 3.44156 19.9335C3.06733 19.8919 3.06733 19.3514 3.44156 19.3098C12.7972 17.7713 14.4604 15.8586 15.7078 4.46553C15.7494 4.0913 16.2899 4.0913 16.3315 4.46553C17.5789 15.8586 19.2422 17.7297 28.5978 19.3098C28.9304 19.3514 28.9304 19.8503 28.5978 19.9335Z" fill="#FF9800"/>
+<path d="M32.5895 6.79404C29.6789 7.37616 28.8473 8.33252 28.3483 11.7421C28.3067 12.1163 27.7662 12.1163 27.7246 11.7421C27.2256 8.33252 26.394 7.37616 23.4834 6.75246C23.1507 6.66929 23.1507 6.21191 23.4834 6.12875C26.3524 5.54662 27.2256 4.59027 27.7246 1.18066C27.7662 0.806438 28.3067 0.806438 28.3483 1.18066C28.8473 4.59027 29.6789 5.54662 32.5895 6.17033C32.9222 6.25349 32.9222 6.75246 32.5895 6.79404Z" fill="#FF9800"/>
+</svg></span>';
+    const singleRepeat = Array(5).fill(`${textContent} ${starEmoji}`).join(' ');
+    
+    // Create two identical text blocks for seamless scrolling
+    const marqueeText1 = document.createElement('div');
+    marqueeText1.className = 'marquee-text';
+    marqueeText1.innerHTML = singleRepeat;
+    
+    const marqueeText2 = document.createElement('div');
+    marqueeText2.className = 'marquee-text';
+    marqueeText2.innerHTML = singleRepeat;
+    
+    // Append both text blocks to create seamless loop
+    marqueeContent.appendChild(marqueeText1);
+    marqueeContent.appendChild(marqueeText2);
+    marqueeContainer.appendChild(marqueeContent);
+
+    // Add click functionality (optional - you can customize this)
+    marqueeContainer.addEventListener('click', function() {
+      // Add your click action here
+      // For example: window.location.href = '/wellness-products';
+      console.log('Wellness marquee clicked!');
+    });
+
+    // Insert the marquee at the very top of the body
+    document.body.insertBefore(marqueeContainer, document.body.firstChild);
+
+    console.log('Wellness marquee successfully added to top of page!');
+  }
+
+  // Execute when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', addWellnessMarquee);
+  } else {
+    addWellnessMarquee();
+  }
+
+  // Also try again after a short delay in case Squarespace loads content dynamically
+  setTimeout(addWellnessMarquee, 1000);
+  setTimeout(addWellnessMarquee, 3000);
+</script>

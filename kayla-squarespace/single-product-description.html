@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+  .sol-product {
+    font-family: 'Helvetica Neue', sans-serif;
+    color: #2b2b2b;
+    padding: 2rem;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .sol-card {
+    background: #ff980014;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    flex: 1 1 calc(50% - 20px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  .sol-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .sol-product h1 {
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .sol-product .tagline {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+
+  .sol-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #9E3FFD;
+  }
+
+  .sol-section ul {
+    list-style: none;
+    padding: 0;
+    line-height: 1.6;
+  }
+
+  .sol-section ul li::before {
+    content: '✅';
+    margin-right: 0.5rem;
+    color: #2ecc71;
+  }
+
+  .sol-card-quote {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .sol-quote {
+    font-style: italic;
+    background: #FFF7DE;
+    border-left: 4px solid #9E3FFD;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    font-size: 1.1rem;
+    border-radius: 8px;
+  }
+
+  .sol-ingredients table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+
+  .sol-ingredients th,
+  .sol-ingredients td {
+    border: 1px solid #eee;
+    padding: 0.75rem;
+    text-align: left;
+  }
+
+  .sol-ingredients th {
+    background: #f9f9f9;
+    color: #555;
+  }
+
+  .emoji {
+    font-size: 1.3rem;
+    margin-right: 0.5rem;
+  }
+
+  /* 🔧 Responsive Design */
+  @media (max-width: 768px) {
+    .sol-product {
+      flex-direction: column;
+      padding: 1rem;
+      gap: 1.5rem;
+    }
+
+    .sol-card {
+      flex: 1 1 100%;
+      min-width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .sol-product h1 {
+      font-size: 1.5rem;
+    }
+
+    .sol-section h2 {
+      font-size: 1.3rem;
+    }
+
+    .sol-quote {
+      font-size: 1rem;
+    }
+
+    .sol-ingredients th,
+    .sol-ingredients td {
+      font-size: 0.95rem;
+    }
+  }
+</style>
+
+
+</head>
+<body>
+    
+
+
+
+<div class="sol-product">
+  <div class="sol-card">
+    <h1>🥇 SOL Water — Drink Beyond</h1>
+    <p class="tagline">More than hydration — it's motivation in a bottle.</p>
+    <p>SOL blends natural purity with functional ingredients to power your body and sharpen your mind.</p>
+  </div>
+
+  <div class="sol-card sol-section">
+    <h2>🧠 Hydration with Purpose</h2>
+    <ul>
+      <li>Clean energy and recovery support</li>
+      <li>A lifestyle of wellness and achievement</li>
+    </ul>
+  </div>
+
+  <div class="sol-card sol-section">
+    <h2>✨ Why Choose SOL?</h2>
+    <ul>
+      <li>Boosts metabolism & supports recovery</li>
+      <li>Improves digestion & gut health</li>
+      <li>Energizes with clean, natural ingredients</li>
+      <li>Infused with turmeric, honey, cayenne & more</li>
+    </ul>
+  </div>
+
+  <div class="sol-card sol-quote">
+    “It’s hydration, motivation, and transformation in every sip.”
+  </div>
+
+  <div class="sol-card sol-section sol-ingredients">
+    <h2>🌿 What’s Inside</h2>
+    <p>Nature meets science. Every ingredient, with purpose.</p>
+    <table>
+      <tr>
+        <th>Ingredient</th>
+        <th>Benefits</th>
+      </tr>
+      <tr>
+        <td><span class="emoji">💧</span>Water</td>
+        <td>Deep cellular hydration</td>
+      </tr>
+      <tr>
+        <td><span class="emoji">🍯</span>Raw Honey</td>
+        <td>Natural energy + immunity</td>
+      </tr>
+      <tr>
+        <td><span class="emoji">🥥</span>Coconut Water</td>
+        <td>Electrolytes & recovery</td>
+      </tr>
+      <tr>
+        <td><span class="emoji">🍎</span>Apple Cider Vinegar</td>
+        <td>Gut & pH balance</td>
+      </tr>
+      <tr>
+        <td><span class="emoji">🌶️</span>Cayenne & Turmeric</td>
+        <td>Metabolism & inflammation support</td>
+      </tr>
+      <tr>
+        <td><span class="emoji">🍋</span>Lemon Peel Oil</td>
+        <td>Detox & citrus flavor</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="sol-card sol-section">
+    <h2>🔬 What Makes SOL Different?</h2>
+    <ul>
+      <li>Handcrafted after 6+ tested formulas</li>
+      <li>All-natural & no artificial additives</li>
+      <li>Eco-friendly, recyclable packaging</li>
+      <li>Designed to inspire, invigorate, and elevate</li>
+    </ul>
+  </div>
+</div>
+
+
+</body>
+</html>
