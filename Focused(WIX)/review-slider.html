@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Reviews Slideshow</title>
+    <style>
+        .reviews-container {
+            font-family: 'Mulish', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .reviews-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            background-color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .rating-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .star {
+            color: #fbbc04;
+            font-size: 24px;
+        }
+
+        .review-count {
+            color: #666;
+            font-size: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .google-logo svg {
+            width: 90px;
+            height: 35px;
+            margin-top: 10px;
+        }
+
+        .reviews-slider {
+            position: relative;
+            overflow: hidden;
+            padding: 0 60px; /* Space for navigation arrows */
+        }
+
+        .reviews-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            gap: 15px;
+            padding: 5px 0; /* Add some padding to prevent shadow clipping */
+        }
+
+        .review-card {
+            min-width: 300px;
+            flex: 0 0 300px;
+            padding: 24px;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4285f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .reviewer-details h4 {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .review-date {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .review-stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .review-star {
+            color: #fbbc04;
+            font-size: 16px;
+        }
+
+        .review-text {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        .review-text.collapsed {
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .read-more {
+            color: #1a73e8;
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            align-self: flex-start;
+            background: none;
+            border: none;
+            padding: 0;
+            transition: color 0.2s ease;
+        }
+
+        .read-more:hover {
+            color: #0d5bba;
+            text-decoration: underline;
+        }
+
+        .slider-controls {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 10;
+            opacity: 0.9;
+        }
+
+        .slider-controls:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slider-controls:hover {
+            background-color: #f8f9fa;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 1;
+        }
+
+        .prev-btn {
+            left: 10px;
+        }
+
+        .next-btn {
+            right: 10px;
+        }
+
+        .slider-controls svg {
+            width: 16px;
+            height: 16px;
+            fill: #666;
+        }
+
+        /* Loading state */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .reviews-container {
+                padding: 20px 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .reviews-slider {
+                padding: 0 50px;
+            }
+            
+            .review-card {
+                min-width: 280px;
+                flex: 0 0 280px;
+                padding: 20px;
+            }
+            
+            .rating-number {
+                font-size: 36px;
+            }
+            
+            .slider-controls {
+                width: 36px;
+                height: 36px;
+            }
+
+            .reviews-track {
+                gap: 10px;
+            }
+
+            .reviews-header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 16px;
+            }
+
+            .google-logo svg {
+                width: 70px;
+                height: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .reviews-slider {
+                padding: 0 40px;
+            }
+
+            .review-card {
+                min-width: calc(100% - 20px);
+                flex: 0 0 calc(100% - 20px);
+                max-width: none;
+                padding: 16px;
+                margin: 0 10px;
+            }
+            
+            .rating-number {
+                font-size: 32px;
+            }
+
+            .slider-controls {
+                width: 32px;
+                height: 32px;
+            }
+
+            .prev-btn {
+                left: 5px;
+            }
+
+            .next-btn {
+                right: 5px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .reviews-slider {
+                padding: 0 35px;
+            }
+
+            .review-card {
+                min-width: calc(100% - 20px);
+                flex: 0 0 calc(100% - 20px);
+                padding: 14px;
+                margin: 0 10px;
+            }
+
+            .rating-number {
+                font-size: 28px;
+            }
+
+            .google-logo svg {
+                width: 60px;
+                height: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="reviews-container">
+        <div class="reviews-header">
+            <div class="rating-display">
+                <span class="rating-number">5.0</span>
+                <div class="stars">
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                    <span class="star">★</span>
+                </div>
+            </div>
+            <div class="review-count">6 reviews on <span class="google-logo"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 85 36" class="injected-svg" data-src="https://static.elfsight.com/icons/app-all-in-one-reviews-logos-google-logo-multicolor.svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g clip-path="url(#a-2)"><path fill="#4285F4" d="M20.778 13.43h-9.862v2.927h6.994c-.345 4.104-3.76 5.854-6.982 5.854-4.123 0-7.72-3.244-7.72-7.791 0-4.43 3.429-7.841 7.73-7.841 3.317 0 5.272 2.115 5.272 2.115l2.049-2.122s-2.63-2.928-7.427-2.928C4.725 3.644 0 8.8 0 14.367c0 5.457 4.445 10.777 10.988 10.777 5.756 0 9.969-3.942 9.969-9.772 0-1.23-.179-1.941-.179-1.941Z"></path><path fill="#EA4335" d="M28.857 11.312c-4.047 0-6.947 3.163-6.947 6.853 0 3.744 2.813 6.966 6.994 6.966 3.786 0 6.887-2.893 6.887-6.886 0-4.576-3.607-6.933-6.934-6.933Zm.04 2.714c1.99 0 3.876 1.609 3.876 4.201 0 2.538-1.878 4.192-3.885 4.192-2.205 0-3.945-1.766-3.945-4.212 0-2.394 1.718-4.181 3.954-4.181Z"></path><path fill="#FBBC05" d="M43.965 11.312c-4.046 0-6.946 3.163-6.946 6.853 0 3.744 2.813 6.966 6.994 6.966 3.785 0 6.886-2.893 6.886-6.886 0-4.576-3.607-6.933-6.934-6.933Zm.04 2.714c1.99 0 3.876 1.609 3.876 4.201 0 2.538-1.877 4.192-3.885 4.192-2.205 0-3.945-1.766-3.945-4.212 0-2.394 1.718-4.181 3.955-4.181Z"></path><path fill="#4285F4" d="M58.783 11.319c-3.714 0-6.634 3.253-6.634 6.904 0 4.16 3.385 6.918 6.57 6.918 1.97 0 3.017-.782 3.79-1.68v1.363c0 2.384-1.448 3.812-3.633 3.812-2.11 0-3.169-1.57-3.537-2.46l-2.656 1.11c.943 1.992 2.839 4.07 6.215 4.07 3.693 0 6.508-2.327 6.508-7.205V11.734h-2.897v1.17c-.89-.96-2.109-1.585-3.726-1.585Zm.269 2.709c1.821 0 3.69 1.554 3.69 4.21 0 2.699-1.865 4.187-3.73 4.187-1.98 0-3.823-1.608-3.823-4.161 0-2.653 1.914-4.236 3.863-4.236Z"></path><path fill="#EA4335" d="M78.288 11.302c-3.504 0-6.446 2.788-6.446 6.901 0 4.353 3.28 6.934 6.782 6.934 2.924 0 4.718-1.6 5.789-3.032l-2.389-1.59c-.62.962-1.656 1.902-3.385 1.902-1.943 0-2.836-1.063-3.39-2.094l9.266-3.845-.48-1.126c-.896-2.207-2.984-4.05-5.747-4.05Zm.12 2.658c1.263 0 2.171.671 2.557 1.476l-6.187 2.586c-.267-2.002 1.63-4.062 3.63-4.062Z"></path><path fill="#34A853" d="M67.425 24.727h3.044V4.359h-3.044v20.368Z"></path></g><defs><clipPath id="a-2"><path fill="#fff" d="M0 0h84.515v36H0z"></path></clipPath></defs></svg></span></div>
+        </div>
+
+        <div class="reviews-slider">
+            <div class="reviews-track" id="reviewsTrack">
+                <!-- Reviews will be dynamically inserted here -->
+            </div>
+            
+            <button class="slider-controls prev-btn" id="prevBtn" aria-label="Previous review">
+                <svg viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+            </button>
+            
+            <button class="slider-controls next-btn" id="nextBtn" aria-label="Next review">
+                <svg viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Dynamic review data
+        const reviewsData = [
+            {
+                name: "Nicole Wednesday",
+                date: "2 months ago",
+                rating: 5,
+                text: "Mr. Brian was professional and made me feel very comfortable even on the phone call I had before going there. He was knowledgeable and gave me a straight forward answer to my questions. The office was clean and organized. I was very satisfied with the service.",
+                avatar: "N"
+            },
+            {
+                name: "Slava Mikalnik",
+                date: "8 months ago",
+                rating: 5,
+                text: "Due to certain life circumstances I had to go through a few polygraph tests this year. Each one of them I had at a different location with a different examiner. Brian was by far the most professional and pleasant experience I had. Highly recommend!",
+                avatar: "S"
+            },
+            {
+                name: "Midnight Fade Beverly Hills",
+                date: "10 months ago",
+                rating: 5,
+                text: "Very easy to communicate with. Answered all my questions & made it easy to move forward. Also helpful with scheduling and accommodating my busy schedule. Would definitely recommend to anyone needing these services.",
+                avatar: "M"
+            },
+            {
+                name: "Marc",
+                date: "11 months ago",
+                rating: 5,
+                text: "Excellent and professional service, he provided exactly what we needed in a straight-forward manner and with care. The process was smooth and efficient. Highly recommend for anyone seeking reliable polygraph services.",
+                avatar: "M"
+            },
+            {
+                name: "Sarah Johnson",
+                date: "1 year ago",
+                rating: 5,
+                text: "Outstanding experience from start to finish. The examiner was thorough, professional, and made me feel at ease throughout the entire process. The results were delivered promptly and the report was comprehensive.",
+                avatar: "S"
+            },
+            {
+                name: "David Chen",
+                date: "1 year ago",
+                rating: 5,
+                text: "Highly professional service with excellent attention to detail. The examiner explained everything clearly and answered all my questions patiently. The facility was modern and well-maintained. Definitely recommended.",
+                avatar: "D"
+            }
+        ];
+
+        class ReviewsSlider {
+            constructor() {
+                this.currentSlide = 0;
+                this.totalSlides = reviewsData.length;
+                this.autoSlideInterval = null;
+                this.cardsVisible = this.calculateCardsVisible();
+                this.isDragging = false;
+                this.startX = 0;
+                this.currentX = 0;
+                this.touchThreshold = 50;
+                this.sliderWidth = 0;
+                this.cardWidth = 0;
+                this.gapWidth = 15;
+                this.maxSlides = 0;
+                this.track = document.getElementById('reviewsTrack');
+                this.prevBtn = document.getElementById('prevBtn');
+                this.nextBtn = document.getElementById('nextBtn');
+                this.container = document.querySelector('.reviews-container');
+                this.slider = document.querySelector('.reviews-slider');
+                
+                this.init();
+                this.setupEventListeners();
+                this.startAutoSlide();
+            }
+
+            init() {
+                this.renderReviews();
+                this.updateSlider();
+                this.updateControlButtons();
+            }
+
+            calculateCardsVisible() {
+                const width = window.innerWidth;
+                if (width <= 480) return 1;
+                if (width <= 768) return 2;
+                if (width <= 1024) return 3;
+                return 4;
+            }
+
+            calculateCardWidth() {
+                const width = window.innerWidth;
+                if (width <= 480) return this.slider.offsetWidth - 40;
+                if (width <= 768) return 280;
+                return 300;
+            }
+
+            calculateGapWidth() {
+                const width = window.innerWidth;
+                if (width <= 768) return 10;
+                return 15;
+            }
+
+            renderReviews() {
+                this.track.innerHTML = '';
+
+                reviewsData.forEach((review, index) => {
+                    const reviewCard = document.createElement('div');
+                    reviewCard.className = 'review-card';
+                    
+                    const stars = '★'.repeat(review.rating);
+                    
+                    reviewCard.innerHTML = `
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar">${review.avatar}</div>
+                            <div class="reviewer-details">
+                                <h4>${review.name}</h4>
+                                <div class="review-date">${review.date}</div>
+                            </div>
+                        </div>
+                        <div class="review-stars">
+                            ${stars.split('').map(star => `<span class="review-star">${star}</span>`).join('')}
+                        </div>
+                        <div class="review-text collapsed" id="reviewText${index}">${review.text}</div>
+                        <button class="read-more" onclick="toggleReviewText(${index})">Read more</button>
+                    `;
+                    
+                    this.track.appendChild(reviewCard);
+                });
+            }
+
+            updateSlider() {
+                this.sliderWidth = this.slider.offsetWidth;
+                this.cardWidth = this.calculateCardWidth();
+                this.gapWidth = this.calculateGapWidth();
+                this.cardsVisible = this.calculateCardsVisible();
+                
+                // Calculate how many cards can actually fit
+                const availableWidth = this.sliderWidth - (this.cardsVisible <= 1 ? 80 : 120);
+                const cardsThatFit = Math.min(this.cardsVisible, Math.floor(availableWidth / (this.cardWidth + this.gapWidth)));
+                this.cardsVisible = Math.max(1, cardsThatFit);
+                
+                // Calculate maximum slides
+                this.maxSlides = Math.max(0, this.totalSlides - this.cardsVisible);
+                
+                // Ensure current slide is within bounds
+                this.currentSlide = Math.min(this.currentSlide, this.maxSlides);
+                
+                // Calculate offset
+                const offset = this.currentSlide * (this.cardWidth + this.gapWidth);
+                this.track.style.transform = `translateX(-${offset}px)`;
+                
+                // Update control buttons
+                this.updateControlButtons();
+            }
+
+            updateControlButtons() {
+                this.prevBtn.disabled = this.currentSlide === 0;
+                this.nextBtn.disabled = this.currentSlide >= this.maxSlides;
+            }
+
+            goToSlide(index) {
+                this.currentSlide = Math.max(0, Math.min(index, this.maxSlides));
+                this.updateSlider();
+            }
+
+            nextSlide() {
+                if (this.currentSlide < this.maxSlides) {
+                    this.currentSlide++;
+                } else {
+                    this.currentSlide = 0;
+                }
+                this.updateSlider();
+            }
+
+            prevSlide() {
+                if (this.currentSlide > 0) {
+                    this.currentSlide--;
+                } else {
+                    this.currentSlide = this.maxSlides;
+                }
+                this.updateSlider();
+            }
+
+            startAutoSlide() {
+                this.stopAutoSlide();
+                this.autoSlideInterval = setInterval(() => {
+                    this.nextSlide();
+                }, 5000);
+            }
+
+            stopAutoSlide() {
+                if (this.autoSlideInterval) {
+                    clearInterval(this.autoSlideInterval);
+                    this.autoSlideInterval = null;
+                }
+            }
+
+            handleTouchStart(e) {
+                this.startX = e.touches[0].clientX;
+                this.isDragging = true;
+                this.stopAutoSlide();
+                this.track.style.transition = 'none';
+            }
+
+            handleTouchMove(e) {
+                if (!this.isDragging) return;
+                this.currentX = e.touches[0].clientX;
+                
+                // Calculate drag distance
+                const dragDistance = this.startX - this.currentX;
+                const currentOffset = this.currentSlide * (this.cardWidth + this.gapWidth);
+                const newOffset = currentOffset + dragDistance;
+                
+                // Apply the drag movement
+                this.track.style.transform = `translateX(-${newOffset}px)`;
+            }
+
+            handleTouchEnd() {
+                if (!this.isDragging) return;
+                this.isDragging = false;
+                this.track.style.transition = 'transform 0.5s ease-in-out';
+                
+                const dragDistance = this.startX - this.currentX;
+                
+                if (Math.abs(dragDistance) > this.touchThreshold) {
+                    if (dragDistance > 0) {
+                        this.nextSlide();
+                    } else {
+                        this.prevSlide();
+                    }
+                } else {
+                    // Return to current position if threshold not met
+                    this.updateSlider();
+                }
+                
+                this.startAutoSlide();
+            }
+
+            handleResize() {
+                // Debounce resize events
+                clearTimeout(this.resizeTimeout);
+                this.resizeTimeout = setTimeout(() => {
+                    this.currentSlide = 0;
+                    this.updateSlider();
+                }, 200);
+            }
+
+            setupEventListeners() {
+                // Button controls
+                this.prevBtn.addEventListener('click', () => {
+                    this.stopAutoSlide();
+                    this.prevSlide();
+                    this.startAutoSlide();
+                });
+
+                this.nextBtn.addEventListener('click', () => {
+                    this.stopAutoSlide();
+                    this.nextSlide();
+                    this.startAutoSlide();
+                });
+
+                // Pause auto-slide on hover
+                this.container.addEventListener('mouseenter', () => this.stopAutoSlide());
+                this.container.addEventListener('mouseleave', () => this.startAutoSlide());
+
+                // Touch events for mobile
+                this.container.addEventListener('touchstart', (e) => this.handleTouchStart(e));
+                this.container.addEventListener('touchmove', (e) => this.handleTouchMove(e));
+                this.container.addEventListener('touchend', () => this.handleTouchEnd());
+
+                // Handle window resize
+                window.addEventListener('resize', () => this.handleResize());
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') {
+                        this.prevSlide();
+                    } else if (e.key === 'ArrowRight') {
+                        this.nextSlide();
+                    }
+                });
+            }
+        }
+
+        // Toggle review text function
+        function toggleReviewText(index) {
+            const reviewText = document.getElementById(`reviewText${index}`);
+            const button = reviewText.nextElementSibling;
+            
+            if (reviewText.classList.contains('collapsed')) {
+                reviewText.classList.remove('collapsed');
+                button.textContent = 'Show less';
+            } else {
+                reviewText.classList.add('collapsed');
+                button.textContent = 'Read more';
+            }
+        }
+
+        // Initialize the slider when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new ReviewsSlider();
+        });
+    </script>
+</body>
+</html>
